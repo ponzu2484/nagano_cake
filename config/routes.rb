@@ -5,7 +5,20 @@ Rails.application.routes.draw do
     registrations: "public/registrations",
     sessions: 'public/sessions'
   }
-  
+  scope module: :public do
+    root 'homes#top'
+    get 'about' => 'homes#about'
+    resources :items, only: [:index, :show]
+    resources :customers, except: [:index, :destroy, :new, :create]
+    post 'customers/unsubscribe' => 'customers#unsubscribe'
+    patch 'customers/withdrawal' => 'customers#withdrawal'
+    resources :cart_items, except: [:new, :show, :edit]
+    delete 'cart_items/destroy_all' => 'cart_items#destroy_all'
+    resources :orders, except: [:edit, :update, :destroy]
+    post 'orders/confirm' => 'orders#confirm'
+    get 'orders/completion' => 'orders#completion'
+    resources :addresses, except: [:new, :show]
+  end
   
   #管理者用
   #URL/admins/sign_in...
